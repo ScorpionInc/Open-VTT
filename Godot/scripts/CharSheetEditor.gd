@@ -154,16 +154,23 @@ func _on_save_file_dialog_confirmed():
 		_on_confirmation_dialog_confirmed(path)
 
 
+# This function writes the character sheet data to disk.
 func _on_confirmation_dialog_confirmed(path = null):
 	if path == null:
 		path = char_sheet_base_path + "/" + savefilediag.current_path
 	if not DirAccess.dir_exists_absolute(path):
 		DirAccess.make_dir_recursive_absolute(path)
-	var file = FileAccess.open(path + "/" + current_char_sheet_name + ".char_sheet", FileAccess.WRITE)
-	print("arr: ", char_sheet_arr)
-	print("str: ", var_to_str(char_sheet_arr))
-	#file.store_var(char_sheet_arr)
-	file.store_string(var_to_str(char_sheet_arr))
+	var final_path = (path + "/" + current_char_sheet_name + ".char_sheet")
+	print("Opening file at path: ", final_path)#!Debugging
+	var file = FileAccess.open(final_path, FileAccess.WRITE)
+	if file == null:
+		printerr("Failed to open character sheet with write access.")
+		return
+	var char_sheet_arr_str = var_to_str(self.char_sheet_arr)
+	print("arr: ", self.char_sheet_arr)#!Debugging
+	print("str: ", char_sheet_arr_str)#!Debugging
+	#file.store_var(self.char_sheet_arr)
+	file.store_string(char_sheet_arr_str)
 	current_sheet_folder = path
 	saved = true
 	file.close()
@@ -176,7 +183,7 @@ func _on_load_file_dialog_dir_selected(dir):
 	print("dir: ", current_char_sheet_name)
 	var file = FileAccess.open(path + "/" + current_char_sheet_name + ".char_sheet", FileAccess.READ)
 	if file == null:
-		print("file is null")
+		printerr("_on_load_file_dialog_dir_selected() file is null")
 		return
 	char_sheet_arr = str_to_var(file.get_as_text())
 	file.close()
