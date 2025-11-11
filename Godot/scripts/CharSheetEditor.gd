@@ -97,18 +97,18 @@ func _ready():
 	node.remove_child(select_box)
 	node.add_child(select_box, false, Node.INTERNAL_MODE_FRONT)
 
-
-func get_font_size(font: Font, size, text):
-	print("get_font_size")
+# Called by load_input_from_dict() result is cached in a dictionary parameter
+func get_font_size(font: Font, _size, text):
+	print("get_font_size() was called.")
 	var n = 1
 	var m = 1
-	for i in range(int(size.y), 1, -1):
-		print(i, " ", font.get_height(i), " ", size.y)
-		if font.get_height(i) <= size.y:
+	for i in range(int(_size.y), 1, -1):
+		print(i, " ", font.get_height(i), " ", _size.y)
+		if font.get_height(i) <= _size.y:
 			n = i
 			break
-	for i in range(int(size.y), 1, -1):
-		if font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, i).x <= size.x:
+	for i in range(int(_size.y), 1, -1):
+		if font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, i).x <= _size.x:
 			m = i
 			break
 	return min(m,n)
