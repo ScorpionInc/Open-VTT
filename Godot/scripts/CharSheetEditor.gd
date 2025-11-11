@@ -156,15 +156,24 @@ func _on_save_file_dialog_confirmed():
 
 # This function writes the character sheet data to disk.
 func _on_confirmation_dialog_confirmed(path = null):
+	#path parameter: res://saves/character_sheets/res://saves/character_sheets/test_char_sheet
+	#char_sheet_base_path: res://saves/character_sheets
+	#savefilediag.current_path: res://saves/character_sheets/test_char_sheet
+	print("path parameter: ", path)#Debugging
+	print("char_sheet_base_path: ", char_sheet_base_path)#Debugging
+	print("savefilediag.current_path: ", savefilediag.current_path)#Debugging
 	if path == null:
 		path = char_sheet_base_path + "/" + savefilediag.current_path
 	if not DirAccess.dir_exists_absolute(path):
 		DirAccess.make_dir_recursive_absolute(path)
 	var final_path = (path + "/" + current_char_sheet_name + ".char_sheet")
-	print("Opening file at path: ", final_path)#!Debugging
+	# result: res://saves/character_sheets/res://saves/character_sheets/test_char_sheet/test_char_sheet.char_sheet
 	var file = FileAccess.open(final_path, FileAccess.WRITE)
 	if file == null:
-		printerr("Failed to open character sheet with write access.")
+		printerr(
+			"Failed to open character sheet '",
+			final_path, "' with write access."
+		)
 		return
 	var char_sheet_arr_str = var_to_str(self.char_sheet_arr)
 	print("arr: ", self.char_sheet_arr)#!Debugging
